@@ -9,7 +9,6 @@ How to Use?
 ------------------------
 
 .. note::
-
     In the following steps, I am assuming that you copied sphinxweb to /var/www/sphinxweb and cd to it.
 
 
