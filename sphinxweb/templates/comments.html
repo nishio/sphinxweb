@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{%- block title %}
+  Comments
+{%- endblock %}
+
+
+{%- block body %}
+
+    <h1>Comments</h1>
+    {% for comment in comments %}
+
+        <h3>{{ comment.username }} on <a href="/{{comment.node.document}}#ao{{comment.node_id}}">{{ comment.node.document }}</a></h3>
+        <div id="cd{{ comment.id }}" class="sphinx-comment">
+          <div class="comment-content">
+            <div class="comment-text comment">{{ comment.text|safe }}
+            </div>
+            <br/>
+            <p> - commented on {{ comment.time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <div class="clearleft"></div>
+          </div>
+        </div>
+
+    {% endfor %}
+
+{%- endblock %}
