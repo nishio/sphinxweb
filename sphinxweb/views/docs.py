@@ -26,8 +26,7 @@ def doc(docname):
 
 @docs.route('/_get_comments')
 def get_comments():
-    node_id = request.args.get('node', '')
-    data = support.get_data(node_id)
+    data = dict(source=None, comments=None)
     return jsonify(**data)
 
 

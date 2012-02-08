@@ -623,9 +623,9 @@
   $.fn.comment = function() {
     return this.each(function() {
       var id = $(this).attr('id').substring(1);
-      var count = COMMENT_METADATA[id];
-      var title = count + ' comment' + (count == 1 ? '' : 's');
-      var image = count > 0 ? opts.commentBrightImage : opts.commentImage;
+      var count = 0;
+      var title = 'Comment';
+      var image = opts.commentImage;
       var addcls = count == 0 ? ' nocomment' : '';
       $(this)
         .append(
@@ -687,14 +687,6 @@
 
   var popupTemplate = '\
     <div class="sphinx-comments" id="sc<%id%>">\
-      <p class="sort-options">\
-        Sort by:\
-        <a href="#" class="sort-option byascage">newest</a>\
-        <a href="#" class="sort-option byage">oldest</a>\
-      </p>\
-      <div class="comment-header">Comments</div>\
-      <div class="comment-loading" id="cn<%id%>">\
-        loading comments... <img src="<%loadingImage%>" alt="" /></div>\
       <ul id="cl<%id%>" class="comment-ul"></ul>\
       <div id="ca<%id%>">\
       <p class="add-a-comment"><strong>Add a comment</strong>\
