@@ -5,4 +5,4 @@ os.environ['SPHINXWEB_SETTINGS'] = os.path.join(THIS_DIR, 'settings.py')
 from sphinxweb import app
 
 if __name__ == '__main__':
-    app.run()
+    app.run("0.0.0.0")
