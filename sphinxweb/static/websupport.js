@@ -216,7 +216,6 @@
   function addComment(form) {
     var node_id = form.find('input[name="node"]').val();
     var parent_id = form.find('input[name="parent"]').val();
-    var author = form.find('input[name="author"]').val();
     var text = form.find('textarea[name="comment"]').val();
     var proposal = form.find('textarea[name="proposal"]').val();
 
@@ -236,7 +235,6 @@
       data: {
         node: node_id,
         parent: parent_id,
-        author: author,
         text: text,
         proposal: proposal
       },
@@ -624,8 +622,8 @@
     return this.each(function() {
       var id = $(this).attr('id').substring(1);
       var count = 0;
-      var title = 'Comment';
-      var image = opts.commentImage;
+      var title = count + ' comment' + (count == 1 ? '' : 's');
+      var image = count > 0 ? opts.commentBrightImage : opts.commentImage;
       var addcls = count == 0 ? ' nocomment' : '';
       $(this)
         .append(
@@ -687,17 +685,25 @@
 
   var popupTemplate = '\
     <div class="sphinx-comments" id="sc<%id%>">\
+      <p class="sort-options">\
+        Sort by:\
+        <a href="#" class="sort-option byrating">best rated</a>\
+        <a href="#" class="sort-option byascage">newest</a>\
+        <a href="#" class="sort-option byage">oldest</a>\
+      </p>\
+      <div class="comment-header">Comments</div>\
+      <div class="comment-loading" id="cn<%id%>">\
+        loading comments... <img src="<%loadingImage%>" alt="" /></div>\
       <ul id="cl<%id%>" class="comment-ul"></ul>\
       <div id="ca<%id%>">\
-      <p class="add-a-comment"><strong>Add a comment</strong>\
+      <p class="add-a-comment">Add a comment\
         (<a href="#" class="comment-markup" id="ab<%id%>">markup</a>):</p>\
       <div class="comment-markup-box" id="mb<%id%>">\
         reStructured text markup: <i>*emph*</i>, <b>**strong**</b>, \
         <tt>``code``</tt>, \
         code blocks: <tt>::</tt> and an indented block after blank line</div>\
       <form method="post" id="cf<%id%>" class="comment-form" action="">\
-        <input type="text" name="author" placeholder="Your Name"> <br\>\
-        <textarea name="comment" cols="80" placeholder="Your Comment"></textarea>\
+        <textarea name="comment" cols="80"></textarea>\
         <p class="propose-button">\
           <a href="#" id="pc<%id%>" class="show-propose-change">\
             Propose a change &#9657;\
@@ -738,6 +744,7 @@
       <div class="comment-content">\
         <p class="tagline comment">\
           <span class="user-id"><%username%></span>\
+          <span class="rating"><%pretty_rating%></span>\
           <span class="delta"><%time.delta%></span>\
         </p>\
         <div class="comment-text comment"><#text#></div>\
