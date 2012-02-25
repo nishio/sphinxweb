@@ -52,10 +52,10 @@ a.sphinx-comment-open img, a.sphinx-comment-close img {
 }
 
 a.sphinx-comment-open.nocomment {
-    visibility: hidden;
+//    visibility: hidden;
 }
 
-:hover > a.sphinx-comment-open {
+a.sphinx-comment-open {
     visibility: visible;
 }
 
