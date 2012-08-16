@@ -26,4 +26,6 @@ for name in ['static', 'templates']:
     target_dir = os.path.join(app.config['BUILD_DIR'], name)
     copy_static_entry(source_dir, target_dir, None)
 
-shutil.copy(os.path.join(os.getcwd(), 'sphinxweb', 'static',  'websupport.js'), os.path.join(app.config['BUILD_DIR'], 'static', '_static', 'websupport.js'))
+shutil.copy(
+    os.path.join(os.getcwd(), 'sphinxweb', 'static',  'websupport.js'), 
+    os.path.join(app.config['BUILD_DIR'], 'static', '_static', 'websupport.js'))

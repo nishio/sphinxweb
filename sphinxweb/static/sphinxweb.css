@@ -51,12 +51,23 @@ a.sphinx-comment-open img, a.sphinx-comment-close img {
     margin-left: .25em;
 }
 
-a.sphinx-comment-open.nocomment {
-    visibility: hidden;
+@media print {
+    a.sphinx-comment-open {
+	visibility: hidden;
+    }
+    a.sphinx-comment-close {
+	visibility: hidden;
+    }
 }
 
-:hover > a.sphinx-comment-open {
+@media screen {
+  a.sphinx-comment-open.nocomment {
+  //    visibility: hidden;
+  }
+
+  a.sphinx-comment-open {
     visibility: visible;
+  }
 }
 
 div.sphinx-comments {
@@ -250,4 +261,12 @@ a.oid img {
     padding: 5px;
     border: 1px solid #DDD;
     margin: 1em .5em 0;
+}
+
+.sort-options {
+    visibility: hidden;
+}
+
+.show-propose-change {
+    visibility: hidden;
 }
