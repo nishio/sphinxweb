@@ -16,6 +16,8 @@ How to Use?
 
     pip install -r requirements.txt
 
+#. Edit settings.py and update SERVER_NAME, EMAIL_HOST_USER and EMAIL_HOST_PASSWORD
+
 #. Build the docs and database ::
 
     python build.py

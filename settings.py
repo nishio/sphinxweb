@@ -6,17 +6,22 @@ DEBUG = True
 SOURCE_DIR = os.path.join(SETTINGS_DIR, 'doc')
 BUILD_DIR = os.path.join(SETTINGS_DIR, 'build')
 DATABASE_URI = 'sqlite:///' + os.path.join(SETTINGS_DIR, 'comments.db')
+SQLALCHEMY_DATABASE_URI = DATABASE_URI
 SECRET_KEY = ''
 SEARCH = ''
 
-# One account per line. Separate username and password by space.
-USERS = """
-john secret
-bob abcdef
-mary xyz
-"""
+SERVER_NAME = 'localhost:5000'
 
-ADMIN_USERS = """
-admin secret
-admin1 secret1
-"""
+# Set this to False to disable sending email notifications
+EMAIL_ENABLED = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'example@gmail.com'
+EMAIL_HOST_PASSWORD = 'a_secret_password'
+EMAIL_SENDER = "Sphinxweb <%s>" % EMAIL_HOST_USER
+
+
+try:
+    from production_settings import *
+except ImportError:
+    pass

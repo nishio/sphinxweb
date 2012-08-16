@@ -1,5 +1,10 @@
+*.pyc
 _build
+build
 comments.db
+production_settings.py
+.DS_Store
+.settings
 .project
 .pydevproject
 
