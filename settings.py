@@ -1,6 +1,8 @@
 import os
 SETTINGS_DIR = os.path.abspath(os.path.dirname(__file__))
 
+APP_NAME = "Sphinxweb"
+
 DEBUG = True
 
 SOURCE_DIR = os.path.join(SETTINGS_DIR, 'doc')
@@ -18,7 +20,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'example@gmail.com'
 EMAIL_HOST_PASSWORD = 'a_secret_password'
-EMAIL_SENDER = "Sphinxweb <%s>" % EMAIL_HOST_USER
+EMAIL_SENDER = "%s <%s>" % (APP_NAME, EMAIL_HOST_USER)
 
 
 try:

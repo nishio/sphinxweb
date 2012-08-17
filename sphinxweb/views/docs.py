@@ -74,23 +74,47 @@ def requires_auth(admin=False):
     return _requires_auth
 
 
-def send_email(username, email_id, comment, url):
+def send_email(receivers, subject, body):
     if app.config['EMAIL_ENABLED']:
-        receivers = User.query.filter_by(is_admin=True).all() or []
-        receivers = [receiver.email for receiver in receivers]
-        receivers.append(email_id)
-        url = "http://%s/%s" % (app.config['SERVER_NAME'], url)
-        body = "%s (%s) added a new comment to %s \n\n %s" % (username, email_id, url, comment)
         msg = MIMEText(body)
         msg['To'] = ", ".join(receivers)
         msg['From'] = app.config['EMAIL_SENDER']
-        msg['Subject'] = "New comment from %s" % username
+        msg['Subject'] = subject
 
         server = smtplib.SMTP(app.config['EMAIL_HOST'], app.config['EMAIL_PORT'])
         server.starttls()
         server.login(app.config['EMAIL_HOST_USER'], app.config['EMAIL_HOST_PASSWORD'])
         server.sendmail(app.config['EMAIL_SENDER'], receivers, msg.as_string())
         server.quit()
+
+
+def send_comment_notification(username, email_id, comment, url):
+    receivers = User.query.filter_by(is_admin=True).all() or []
+    receivers = [receiver.email for receiver in receivers]
+    receivers.append(email_id)
+
+    url = "http://%s/%s" % (app.config['SERVER_NAME'], url)
+    body = "%s (%s) added a new comment to %s \n\n %s" % (username, email_id, url, comment)
+    subject = "New comment from %s" % username
+
+    send_email(receivers, subject, body)
+
+
+def send_signup_notification(username, email_id):
+    app_name = app.config['APP_NAME']
+
+    # Notification to user
+    receivers = [email_id]
+    subject = "Welcome to %s" % app_name
+    body = "Thanks for signing up in %s. Your username is %s. You can access the service at http://%s" % (app_name, username, app.config['SERVER_NAME'])
+    send_email(receivers, subject, body)
+
+    # Notification to admins
+    receivers = User.query.filter_by(is_admin=True).all() or []
+    receivers = [receiver.email for receiver in receivers]
+    subject = "New signup - %s" % username
+    body = "%s (%s) signed up in %s" % (username, email_id, app_name)
+    send_email(receivers, subject, body)
 
 
 @docs.route('/')
@@ -103,11 +127,13 @@ def index():
 def signup():
     if request.method == "POST":
         try:
-            user = User(request.form['username'],
-                        request.form['password'],
-                        request.form['email'])
+            username = request.form['username']
+            password = request.form['password']
+            email_id = request.form['email']
+            user = User(username, password, email_id)
             db.session.add(user)
             db.session.commit()
+            send_signup_notification(username, email_id)
             return flask.redirect("/")
         except Exception as e:
             flask.flash("Sorry, there was an error! %s" % e, category="error")
@@ -154,7 +180,7 @@ def add_comment():
                                   username=username,
                                   proposal=proposal)
     url = "%s#ao%s" % (comment['document'], comment['node'])
-    send_email(username, email, text, url)
+    send_comment_notification(username, email, text, url)
     return jsonify(comment=comment)
 
 
