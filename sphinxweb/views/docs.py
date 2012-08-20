@@ -93,27 +93,33 @@ def send_comment_notification(username, email_id, comment, url):
     receivers = [receiver.email for receiver in receivers]
     receivers.append(email_id)
 
+    args = dict(username=username, email_id=email_id, comment=comment, url=url)
     url = u"http://%s/%s" % (app.config['SERVER_NAME'], url)
-    body = u"%s (%s) added a new comment to %s \n\n %s" % (username, email_id, url, comment)
-    subject = u"New comment from %s" % username
+    body = app.config['COMMENT_NOTIFICATION_BODY'].format(**args)
+    subject = app.config['COMMENT_NOTIFICATION_SUBJECT'].format(**args)
 
     send_email(receivers, subject, body)
 
 
 def send_signup_notification(username, email_id):
     app_name = app.config['APP_NAME']
+    server_name = app.config['SERVER_NAME']
+    args = dict(username=username,
+                email_id=email_id,
+                app_name=app_name,
+                server_name=server_name)
 
     # Notification to user
     receivers = [email_id]
-    subject = u"Welcome to %s" % app_name
-    body = u"Thanks for signing up in %s. Your username is %s. You can access the service at http://%s" % (app_name, username, app.config['SERVER_NAME'])
+    subject = app.config['SIGNUP_EMAIL_SUBJECT'].format(**args)
+    body = app.config['SIGNUP_EMAIL_BODY'].format(**args)
     send_email(receivers, subject, body)
 
     # Notification to admins
     receivers = User.query.filter_by(is_admin=True).all() or []
     receivers = [receiver.email for receiver in receivers]
-    subject = u"New signup - %s" % username
-    body = u"%s (%s) signed up in %s" % (username, email_id, app_name)
+    subject = app.config['SIGNUP_ADMIN_EMAIL_SUBJECT'].format(**args)
+    body = app.config['SIGNUP_ADMIN_EMAIL_SUBJECT'].format(**args)
     send_email(receivers, subject, body)
 
 
