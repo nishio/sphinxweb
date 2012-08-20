@@ -76,7 +76,7 @@ def requires_auth(admin=False):
 
 def send_email(receivers, subject, body):
     if app.config['EMAIL_ENABLED']:
-        msg = MIMEText(body)
+        msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
         msg['To'] = ", ".join(receivers)
         msg['From'] = app.config['EMAIL_SENDER']
         msg['Subject'] = subject
@@ -93,9 +93,9 @@ def send_comment_notification(username, email_id, comment, url):
     receivers = [receiver.email for receiver in receivers]
     receivers.append(email_id)
 
-    url = "http://%s/%s" % (app.config['SERVER_NAME'], url)
-    body = "%s (%s) added a new comment to %s \n\n %s" % (username, email_id, url, comment)
-    subject = "New comment from %s" % username
+    url = u"http://%s/%s" % (app.config['SERVER_NAME'], url)
+    body = u"%s (%s) added a new comment to %s \n\n %s" % (username, email_id, url, comment)
+    subject = u"New comment from %s" % username
 
     send_email(receivers, subject, body)
 
@@ -105,15 +105,15 @@ def send_signup_notification(username, email_id):
 
     # Notification to user
     receivers = [email_id]
-    subject = "Welcome to %s" % app_name
-    body = "Thanks for signing up in %s. Your username is %s. You can access the service at http://%s" % (app_name, username, app.config['SERVER_NAME'])
+    subject = u"Welcome to %s" % app_name
+    body = u"Thanks for signing up in %s. Your username is %s. You can access the service at http://%s" % (app_name, username, app.config['SERVER_NAME'])
     send_email(receivers, subject, body)
 
     # Notification to admins
     receivers = User.query.filter_by(is_admin=True).all() or []
     receivers = [receiver.email for receiver in receivers]
-    subject = "New signup - %s" % username
-    body = "%s (%s) signed up in %s" % (username, email_id, app_name)
+    subject = u"New signup - %s" % username
+    body = u"%s (%s) signed up in %s" % (username, email_id, app_name)
     send_email(receivers, subject, body)
 
 
