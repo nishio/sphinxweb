@@ -93,9 +93,10 @@ def send_comment_notification(username, email_id, comment, url):
     receivers = [receiver.email for receiver in receivers]
     receivers.append(email_id)
 
-    url = "http://%s/%s" % (app.config['SERVER_NAME'], url)
-    body = "%s (%s) added a new comment to %s \n\n %s" % (username, email_id, url, comment)
-    subject = "New comment from %s" % username
+    url = u"http://%s/%s" % (app.config['SERVER_NAME'], url)
+    args = dict(username=username, email_id=email_id, comment=comment, url=url)
+    body = app.config['COMMENT_NOTIFICATION_BODY'].format(**args)
+    subject = app.config['COMMENT_NOTIFICATION_SUBJECT'].format(**args)
 
     send_email(receivers, subject, body)
 
