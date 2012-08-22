@@ -89,15 +89,20 @@ def send_email(receivers, subject, body):
 
 
 def send_comment_notification(username, email_id, comment, url):
-    receivers = User.query.filter_by(is_admin=True).all() or []
-    receivers = [receiver.email for receiver in receivers]
-    receivers.append(email_id)
-
     url = u"http://%s/%s" % (app.config['SERVER_NAME'], url)
     args = dict(username=username, email_id=email_id, comment=comment, url=url)
-    body = app.config['COMMENT_NOTIFICATION_BODY'].format(**args)
-    subject = app.config['COMMENT_NOTIFICATION_SUBJECT'].format(**args)
 
+    # Notification to user
+    receivers = [email_id]
+    subject = app.config['COMMENT_NOTIFICATION_SUBJECT'].format(**args)
+    body = app.config['COMMENT_NOTIFICATION_BODY'].format(**args)
+    send_email(receivers, subject, body)
+
+    # Notification to admins
+    receivers = User.query.filter_by(is_admin=True).all() or []
+    receivers = [receiver.email for receiver in receivers]
+    subject = app.config['COMMENT_ADMIN_NOTIFICATION_SUBJECT'].format(**args)
+    body = app.config['COMMENT_ADMIN_NOTIFICATION_BODY'].format(**args)
     send_email(receivers, subject, body)
 
 

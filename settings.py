@@ -24,8 +24,10 @@ EMAIL_SENDER = "%s <%s>" % (APP_NAME, EMAIL_HOST_USER)
 
 # Email Templates
 # Available fields: username, email_id, url, comment
-COMMENT_NOTIFICATION_SUBJECT = u"New comment from {username}"
-COMMENT_NOTIFICATION_BODY = u"{username} ({email_id}) added a new comment to {url} \n\n {comment}"
+COMMENT_NOTIFICATION_SUBJECT = u"Thank you for your comment"
+COMMENT_NOTIFICATION_BODY = u"Hi {username}, Thank you for your comment on {url} \n\n {comment}"
+COMMENT_ADMIN_NOTIFICATION_SUBJECT = u"New comment from {username}"
+COMMENT_ADMIN_NOTIFICATION_BODY = u"{username} ({email_id}) added a new comment to {url} \n\n {comment}"
 
 # Available fields: username, email_id, app_name, server_name
 SIGNUP_EMAIL_SUBJECT = u"Welcome to {app_name}"
