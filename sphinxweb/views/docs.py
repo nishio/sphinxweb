@@ -93,8 +93,8 @@ def send_comment_notification(username, email_id, comment, url):
     receivers = [receiver.email for receiver in receivers]
     receivers.append(email_id)
 
-    args = dict(username=username, email_id=email_id, comment=comment, url=url)
     url = u"http://%s/%s" % (app.config['SERVER_NAME'], url)
+    args = dict(username=username, email_id=email_id, comment=comment, url=url)
     body = app.config['COMMENT_NOTIFICATION_BODY'].format(**args)
     subject = app.config['COMMENT_NOTIFICATION_SUBJECT'].format(**args)
 
